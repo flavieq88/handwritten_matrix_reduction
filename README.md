@@ -4,7 +4,7 @@ This is a simple Convolutional Neural Network implemented with Tensorflow to cla
 
 The images are from the MNIST dataset.
 
-
+![image](https://github.com/flavieq88/digit_recognizer/assets/166056837/a303fc15-f58a-4df1-acbb-51a8a03538af)
 
 # Installation
 Clone the repository. Then, activate a virtual environment and install the dependencies:
