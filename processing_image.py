@@ -12,9 +12,9 @@ def processImage(filepath):
     image = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE)
 
     image = cv2.resize(255-image, (56, 56)) #invert colours and make it smaller
-    image = cv2.dilate(image, np.ones((2,2), np.uint8), iterations=1) #thicken the lines
-    #thresholds so that "white" becomes true white and "dark" becomes true black and filer out some noise 
-    (thresh, image) = cv2.threshold(image, 128, 255, cv2.ADAPTIVE_THRESH_MEAN_C)
+    image = cv2.dilate(image, np.ones((3,3), np.uint8), iterations=1) #thicken the lines
+    #thresholds so that "white" becomes true white and "dark" becomes true black and filter out some noise 
+    (thresh, image) = cv2.threshold(image, 130, 255, cv2.ADAPTIVE_THRESH_MEAN_C) #mostly useful for paper photos
     image = cv2.resize(image, (28, 28)) #invert colours and make it 28x28
     #doing the resizing in parts makes the final image smoother
     image = image/255 #normalize pixel value ranges to be 0-1
