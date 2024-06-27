@@ -10,14 +10,14 @@ import math
 def processImage(filepath):
     """Returns the processed image that can be fed into the classifier"""
     image = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE)
+
     image = cv2.resize(255-image, (56, 56)) #invert colours and make it smaller
     image = cv2.dilate(image, np.ones((2,2), np.uint8), iterations=1) #thicken the lines
-    #the following are some options for thresholds so that "white" becomes true white and "dark" becomes true black and filer out some noise
-    #(thresh, image) = cv2.threshold(image, 128, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU) 
+    #thresholds so that "white" becomes true white and "dark" becomes true black and filer out some noise 
     (thresh, image) = cv2.threshold(image, 128, 255, cv2.ADAPTIVE_THRESH_MEAN_C)
     image = cv2.resize(image, (28, 28)) #invert colours and make it 28x28
-    image = image/255 #normalize pixel value ranges to be 0-1
     #doing the resizing in parts makes the final image smoother
+    image = image/255 #normalize pixel value ranges to be 0-1
 
     #processing images to make them shaped more similar to the MNIST dataset: digit occupies center 20x20 pixels
 
@@ -69,7 +69,7 @@ if __name__ == "__main__":
 
     #load the classifier 
     model = keras.models.load_model("classifier_model/model.keras")
-    plt.figure(figsize=(11,8))
+    plt.figure(figsize=(11,7))
     for i in range(len(ls)):
         x = predictImage(directory+"/"+ls[i], model)
         predictions.append(x)
@@ -87,5 +87,3 @@ if __name__ == "__main__":
         if str(predictions[i]) == ls[i][0]:
             correct += 1
     print(f"Accuracy = {100*correct/len(ls)}%")
-    
-    
