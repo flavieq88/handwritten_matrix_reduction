@@ -68,7 +68,7 @@ if __name__ == "__main__":
         ls.append(filename)
 
     #load the classifier 
-    model = keras.models.load_model("classifier_model/model.keras")
+    model = keras.models.load_model("classifier_model/model1.keras")
     plt.figure(figsize=(11,7))
     for i in range(len(ls)):
         x = predictImage(directory+"/"+ls[i], model)
