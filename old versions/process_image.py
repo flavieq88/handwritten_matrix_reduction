@@ -9,10 +9,13 @@ def processImage(image):
     """Returns the processed image that can be fed into the classifier"""
     image = cv2.resize(255-image, (56, 56)) #invert colours and make it smaller
     image = cv2.dilate(image, np.ones((2,2), np.uint8), iterations=2) #thicken the lines
+
     #thresholds so that "white" becomes true white and "dark" becomes true black and filter out some noise 
     (thresh, image) = cv2.threshold(image, 130, 255, cv2.ADAPTIVE_THRESH_MEAN_C) #mostly useful for paper photos
+
     image = cv2.resize(image, (28, 28)) #invert colours and make it 28x28
-    #doing the resizing in parts makes the final image smoother
+
+    #i found that doing the resizing in parts makes the final image smoother
     image = image/255 #normalize pixel value ranges to be 0-1
 
     #processing images to make them shaped more similar to the MNIST dataset: digit occupies center 20x20 pixels
@@ -81,13 +84,14 @@ def contours(filepath):
     #find all the contours within image
     contours, hierarchy = cv2.findContours(flooded, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    #get rectangles for countours and remove contours that are enclosed in anotehr
+    #get rectangles for countours and remove contours that are enclosed in another
     rectangles = [cv2.boundingRect(contour) for contour in contours]
+    rectangles.sort(key=lambda x:x[1]) #sort by y coordinate (up to down)
     
     #take the small recatangles as their own image
     images = [image[y:y+h, x:x+w] for x, y, w, h in rectangles]
 
-    #need to square of fthe images for preprocessing
+    #need to square off the images for preprocessing
     for i, image in enumerate(images): 
         rows, cols = image.shape
         if rows>cols:
@@ -103,11 +107,11 @@ def contours(filepath):
 if __name__ == "__main__":
     ls = [] #store the file names
 
-    directory = "testing_images/multi_digit"
+    directory = "./testing_images/multi_digit"
     for filename in os.listdir(directory):
         ls.append(filename)
     
-    model = keras.models.load_model("classifier_model/model.keras")
+    model = keras.models.load_model("./classifier_model/model.keras")
     
     for filename in ls:
         results, images = predictImage(directory+"/"+filename, model)
