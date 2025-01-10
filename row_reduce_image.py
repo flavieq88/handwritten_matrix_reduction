@@ -104,7 +104,7 @@ def predictImage(filepath, classifier, n_rows, n_columns):
     for image in images:
         processed = processImage(image) 
         processed_images.append(processed)
-        pred = classifier.predict(np.array([processed,]))
+        pred = classifier.predict(np.array([processed,]), verbose = 0)
         results.append(np.argmax(pred))
 
     return results, processed_images
